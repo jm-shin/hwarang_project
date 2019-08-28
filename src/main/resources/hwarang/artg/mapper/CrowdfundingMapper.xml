@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwarang.artg.mapper.CrowdfundingMapper">
+	<insert id="insertCrowdfunding" parameterType="hwarang.artg.funding.model.CrowdfundingVO">
+		INSERT INTO CROWDFUNDING (FUNDING_NUM,FUNDING_PRICE, FUNDING_SUBJECT, FUNDING_CONTENT,
+		funding_target_amount,funding_current_collection,funding_hit)
+		VALUES (seq_crowdfunding.nextval, #{price}, #{subject},#{content},#{target_amount},
+				#{current_collection},#{hit})
+	</insert>
+	<update id="updateCrowdfunding" parameterType="hwarang.artg.funding.model.CrowdfundingVO">
+		UPDATE CROWDFUNDING SET FUNDING_SUBJECT = #{subject}, FUNDING_CONTENT = #{content}
+		WHERE FUNDING_NUM = #{num}
+	</update>
+	<update id="updateReadCount" parameterType="hwarang.artg.funding.model.CrowdfundingVO">
+		UPDATE CROWDFUNDING
+		SET funding_hit = funding_hit+1
+		WHERE FUNDING_NUM = #{num}
+	</update>
+	<delete id="deleteCrowdfunding" parameterType="int">
+		DELETE FROM CROWDFUNDING WHERE FUNDING_NUM = #{num}
+	</delete>
+	<select id="selectCrowdfunding" parameterType="int" resultMap="crowdMap">
+		SELECT * FROM CROWDFUNDING WHERE FUNDING_NUM = #{num}
+	</select>
+	<select id="selectAllCrowdfunding" resultMap="crowdMap">
+		SELECT * FROM CROWDFUNDING order by FUNDING_NUM desc
+	</select>
+	<resultMap type="hwarang.artg.funding.model.CrowdfundingVO" id="crowdMap">
+		<result column="FUNDING_NUM" property="num"/>
+		<result column="FUNDING_PRICE" property="price"/>
+		<result column="FUNDING_SUBJECT" property="subject"/>
+		<result column="FUNDING_CONTENT" property="content"/>
+		<result column="FUNDING_CREATED_DATE" property="created_date"/>
+		<result column="FUNDING_TARGET_DATE" property="target_date"/> 
+		<result column="FUNDING_TARGET_AMOUNT" property="target_amount"/>
+		<result column="FUNDING_CURRENT_COLLECTION" property="current_collection"/>
+		<result column="FUNDING_HIT" property="hit"/>
+	</resultMap>
+</mapper>
